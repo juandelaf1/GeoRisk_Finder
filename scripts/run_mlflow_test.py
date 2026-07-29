@@ -12,7 +12,7 @@ def run_test():
         mlflow.log_param("tipo_prueba", "infraestructura_basica")
         mlflow.log_metric("precision_simulada", 0.95)
         
-        print("✅ Run completado. Parámetros y métricas registrados en MLflow correctamente.")
+        print("[OK] Run completado. Parametros y metricas registrados en MLflow correctamente.")
 
 if __name__ == "__main__":
     run_test()

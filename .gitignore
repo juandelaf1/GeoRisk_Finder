@@ -26,5 +26,11 @@ mlflow.db
 mlruns/
 mlartifacts/
 *.sqlite
+figures/
+outputs/should_not_exist/
+notebooks/figures/
+notebooks/*.png
+notebooks/*.pdf
+presentacion/
 frontend/node_modules/
 frontend/dist/
