@@ -34,3 +34,15 @@ notebooks/*.pdf
 presentacion/
 frontend/node_modules/
 frontend/dist/
+georisk-frontend/node_modules/
+georisk-frontend/dist/
+georisk-frontend/.vite/
+*.log
+*.sqlite
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+data/processed/*.parquet
+data/processed/h3_cache.pkl

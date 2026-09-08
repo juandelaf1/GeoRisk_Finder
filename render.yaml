@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: georisk
+    envVars:
+      - key: PORT
+        value: "8000"
+    build:
+      dockerfilePath: Dockerfile
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free

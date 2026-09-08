@@ -1,0 +1,140 @@
+.container {
+  background: var(--color-bg-overlay);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  color: var(--color-ink-text);
+  display: flex;
+  flex-direction: column;
+  min-width: 580px;
+  padding: var(--space-lg);
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: 1fr 1fr;
+}
+
+.row {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  padding: var(--space-sm) 0;
+}
+
+.rowHeader {
+  color: var(--color-ink-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  min-width: 100px;
+  text-transform: uppercase;
+}
+
+.cellA,
+.cellB {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  font-size: 13px;
+  gap: var(--space-sm);
+  justify-content: center;
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.winner {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.loser {
+  color: var(--color-text-muted);
+}
+
+.placeholder {
+  align-items: center;
+  color: var(--color-ink-muted);
+  display: flex;
+  font-size: 12px;
+  height: 100%;
+  justify-content: center;
+  min-height: 80px;
+  text-align: center;
+}
+
+.button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-text);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  transition: all 0.15s ease;
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.buttonClose {
+  composes: button;
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #ef4444;
+}
+
+.buttonClose:hover {
+  background: rgba(220, 38, 38, 0.25);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: var(--space-sm) 0;
+}
+
+.scoreValue {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.scoreLow {
+  color: var(--color-success);
+}
+
+.scoreModerate {
+  color: var(--color-gold);
+}
+
+.scoreHigh {
+  color: var(--color-terra);
+}
+
+.scoreCritical {
+  color: #ef4444;
+}

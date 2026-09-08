@@ -1,6 +1,51 @@
+import hashlib
+
 import numpy as np
 import pandas as pd
 import pytest
+from fastapi.testclient import TestClient
+
+import main as main_module
+from main import DEMO_USERS, _projects_db, app
+
+
+@pytest.fixture(scope="module")
+def client():
+    """FastAPI TestClient — shared across the module for speed."""
+    with TestClient(app) as c:
+        yield c
+
+
+_FIXED_TS = 1768483200.0
+
+
+@pytest.fixture(autouse=True)
+def _freeze_token(monkeypatch):
+    """Patch _make_token to use a fixed timestamp.
+
+    _verify_token calls _make_token for each user and compares, so
+    patching _make_token ensures the generated token always matches
+    during verification — no microsecond drift.
+    """
+    def _fixed_make_token(email: str) -> str:
+        payload = f"{email}:{_FIXED_TS}:{main_module.SECRET_KEY}"
+        return hashlib.sha256(payload.encode()).hexdigest()
+
+    monkeypatch.setattr(main_module, "_make_token", _fixed_make_token)
+
+
+@pytest.fixture
+def auth_token():
+    """Return a valid admin token (time-frozen by _freeze_token)."""
+    return main_module._make_token("admin@georisk.com")
+
+
+@pytest.fixture(autouse=True)
+def _reset_projects_db():
+    """Clear the in-memory projects store before each test."""
+    _projects_db.clear()
+    yield
+    _projects_db.clear()
 
 
 @pytest.fixture(scope="module")

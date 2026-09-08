@@ -1,0 +1,54 @@
+.globe {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.deckgl {
+  width: 100%;
+  height: 100%;
+}
+
+.projectionBadge {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 950;
+  padding: 4px 12px;
+  background: rgba(1, 105, 111, 0.35);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-primary-light);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.legend {
+  position: absolute;
+  bottom: 80px;
+  left: 370px;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(13, 27, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+.gradient {
+  width: 80px;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(to right, rgb(0, 255, 50), rgb(255, 0, 50));
+}
