@@ -1011,23 +1011,34 @@ async def ws_alerts(websocket: WebSocket):
 # ---- Static files ----
 
 STATIC_DIR = Path(__file__).parent / "georisk-frontend" / "dist"
-STATIC_DIR.mkdir(exist_ok=True)
-app.mount("/assets", StaticFiles(directory=str(STATIC_DIR / "assets")), name="assets")
+ASSETS_DIR = STATIC_DIR / "assets"
+
+if ASSETS_DIR.is_dir():
+    app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
 
 
 @app.get("/favicon.svg")
 def favicon():
-    return FileResponse(STATIC_DIR / "favicon.svg")
+    p = STATIC_DIR / "favicon.svg"
+    if p.exists():
+        return FileResponse(p)
+    return {"status": "no favicon"}
 
 
 @app.get("/icons.svg")
 def icons():
-    return FileResponse(STATIC_DIR / "icons.svg")
+    p = STATIC_DIR / "icons.svg"
+    if p.exists():
+        return FileResponse(p)
+    return {"status": "no icons"}
 
 
 @app.get("/")
 def index():
-    return FileResponse(STATIC_DIR / "index.html")
+    p = STATIC_DIR / "index.html"
+    if p.exists():
+        return FileResponse(p)
+    return {"status": "GeoRisk V3 API", "docs": "/docs"}
 
 
 if __name__ == "__main__":
