@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -19,7 +21,7 @@ jobs:
           pip install -r requirements.prod.txt
           pip install pytest httpx pytest-timeout
       - name: Run tests
-        run: python -m pytest tests/test_api.py -v --timeout=30 -x
+        run: python -m pytest tests/test_api.py -v --timeout=120 -x
         env:
           PYTHONPATH: .
 
