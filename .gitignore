@@ -18,6 +18,7 @@ models/
 !georisk_globe/frontend/index.html
 !frontend/index.html
 !georisk_globe/message_sender/frontend/index.html
+!georisk-frontend/index.html
 profiling_reports/
 streamlit_*.log
 _check_*.py
