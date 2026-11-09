@@ -15,7 +15,9 @@
 
 Las catástrofes naturales generan pérdidas globales superiores a los **$300.000 millones anuales**. Los modelos tradicionales suelen evaluar los riesgos (terremotos, huracanes, erupciones) de forma aislada, ignorando las **zonas de riesgo compuesto** donde múltiples amenazas coinciden en el tiempo y espacio.
 
-**GeoRisk Finder** utiliza aprendizaje no supervisado (*Clustering*) sobre una cuadrícula hexagonal espacial (**Uber H3**) para procesar más de **130 millones de eventos históricos**. El sistema categoriza automáticamente cualquier celda del planeta en perfiles de riesgo y evalúa el **Retorno de Inversión (ROI)** de implementar Sistemas de Alerta Temprana (EWS) frente al coste de reconstrucción.
+**GeoRisk Finder** utiliza aprendizaje no supervisado (*clustering*) sobre una cuadrícula hexagonal espacial (**Uber H3**) para integrar eventos históricos multi-peligro (sismos, ciclones, volcanes, registros España/IGN según dataset). El sistema categoriza celdas en perfiles de riesgo y explora el **Retorno de Inversión (ROI)** de Sistemas de Alerta Temprana (EWS) mediante un **modelo de escenarios** (no resultados observados).
+
+> **Verificación de datos (E4, 2026-11-08, `data/processed`):** `grid_features*.csv`/`cluster_labels.csv` = **41.162 filas** (celdas H3 res 3); `usgs_earthquakes_clean.csv` = **308.977** filas; `ciclones_clean.csv` = **646.984**; `espana_clean.csv` = **203.211**; `volcanes_clean.csv` = **278**; `casos_estudio.csv` = **4** (~1,16M filas en estos limpios). Cifras mayores citadas previamente (p.ej. “130M/79M/46M eventos”, “4.5M celdas”) **no se verifican** en los artefactos procesados del repo. Las métricas financieras (p.ej. BCR) provienen del modelo/Excel de escenarios (`streamlit_app/assets/Modelo_Catastrofes_Alerta_Temprana.xlsx`), no de pérdidas observadas.
 
 ---
 
@@ -29,10 +31,10 @@ Las catástrofes naturales generan pérdidas globales superiores a los **$300.00
 
 ## 🌟 Características Clave del Producto
 
-* 🗺️ **Grid Hexagonal Global (Uber H3 Res 3):** Discretización homogénea del planeta en ~12.500 celdas de ~12.300 km² cada una.
-* 🌪️ **Integración Multi-Peligro:** Ingesta y normalización en tiempo real de registros USGS (sismos), IBTrACS/NOAA (ciclones) e IGN (catálogo histórico).
-* 🤖 **Reducción de Dimensionalidad y Clustering:** Pipeline PCA (85% varianza retenida) + K-Means (4 perfiles macro de riesgo) + DBSCAN (detección de celdas atípicas extremas).
-* 📊 **Dashboard de Impacto Financiero (Streamlit):** Módulo interactivo de simulación de escenarios (Conservador, Base, Optimista) con cálculo del Ratio Beneficio-Coste (BCR).
+* 🗺️ **Grid Hexagonal Global (Uber H3 Res 3):** discretización homogénea del planeta. Los artefactos procesados incluyen **~41.162 celdas** (`grid_features*.csv`, E4; coherente con el grid global res 3).
+* 🌪️ **Integración Multi-Peligro:** ingesta y normalización de registros USGS (sismos), IBTrACS/NOAA (ciclones), volcanes e IGN (catálogo histórico), según datasets disponibles.
+* 🤖 **Reducción de Dimensionalidad y Clustering:** pipeline PCA (85% varianza retenida) + K-Means (4 perfiles macro de riesgo) + DBSCAN (detección de celdas atípicas).
+* 📊 **Dashboard de Impacto Financiero (Streamlit):** simulación de escenarios (Conservador, Base, Optimista) con cálculo del Ratio Beneficio-Coste (**BCR, resultado de modelo/Excel, no observado**).
 * 🌐 **Mapa de Riesgo Global 3D:** Visualizador en globo terráqueo con capas dinámicas de amenaza, buscador de ciudades e incidentes en vivo (GDACS).
 * 🏢 **Panel Aseguradora:** Simulador de prima relativa por zona geográfica basado en perfiles de riesgo (K-Means/DBSCAN).
 * 🆘 **Ayuda Humanitaria:** Índice compuesto de prioridad por país combinando severidad física, vulnerabilidad económica y población.
@@ -83,13 +85,13 @@ GeoRisk_Finder/
 ├── data/
 │   ├── raw/                      # Datos originales (NO versionar >50MB)
 │   │   └── ibtracs_sample.csv
-│   └── processed/                # Datasets listos para modelado
-│       ├── usgs_earthquakes_clean.csv   # 79M filas
-│       ├── ciclones_clean.csv           # 46M filas
-│       ├── volcanes_clean.csv           # 7.5K filas
-│       ├── espana_clean.csv             # 11M filas (IGN)
-│       ├── grid_features.csv            # 4.5M celdas × 15 features
-│       ├── cluster_labels.csv           # Etiquetas K-Means + DBSCAN
+│   └── processed/                # Datasets procesados (conteos verificados E4, 2026-11-08)
+│       ├── usgs_earthquakes_clean.csv   # 308.977 filas
+│       ├── ciclones_clean.csv           # 646.984 filas
+│       ├── volcanes_clean.csv           # 278 filas
+│       ├── espana_clean.csv             # 203.211 filas (IGN)
+│       ├── grid_features.csv            # 41.162 celdas (H3 res 3)
+│       ├── cluster_labels.csv           # 41.162 etiquetas K-Means + DBSCAN
 │       ├── interpretacion_clusters.csv  # Perfil riesgo por cluster
 │       └── casos_estudio.csv            # 10 casos validados geo
 ├── notebooks/                    # 7 notebooks en orden de ejecución
@@ -148,10 +150,8 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlru
 #   - Modelos registrados (KMeans, DBSCAN, Pipeline completo)
 ```
 
-* El **12% de las celdas globales** analizadas concentran el **70% del impacto financiero acumulado** por catástrofes.
-* **Clusters de Riesgo Compuesto:** Se identificaron 4 perfiles claros de riesgo, destacando zonas críticas donde la recurrencia ciclónica amplifica el daño sísmico latente.
-* **Detección de Anomalías (DBSCAN):** El algoritmo identificó como "ruido estructural" a regiones costeras insulares de baja frecuencia pero intensidad volcánica/ciclónica extrema (alto valor para reaseguradoras).
-* **Eficiencia en Alerta Temprana:** Los modelos simulados demuestran que por cada **$1 invertido** en sistemas de prevención en zonas de *Cluster Alto Riesgo*, se evitan hasta **$6 en pérdidas** post-desastre (BCR 6:1).
+* **Clusters de Riesgo Compuesto:** identificación de perfiles (K-Means) y anomalías (DBSCAN) sobre el grid H3 procesado; confirmar interpretación vigente en `cluster_labels.csv`/`interpretacion_clusters.csv` y notebooks.
+* **Concentración de impacto / BCR:** las afirmaciones cuantitativas previas (p.ej. “12% celdas → 70% impacto”, “BCR 6:1 demostrado”) **no se verifican** como hechos observados en los artefactos del repo; el BCR es un **resultado de simulación/modelo** (Excel de escenarios). Citar solo métricas verificadas o explícitamente como hipótesis/modelo.
 
 ---
 
