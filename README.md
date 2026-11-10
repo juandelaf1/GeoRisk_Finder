@@ -184,15 +184,33 @@ source venv/bin/activate  # En Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Ejecutar la App Unificada (Streamlit)
+### 2. Configuración de entorno (opcional)
+Si necesitas variables de entorno, usa `.env.example` como plantilla:
+```bash
+# copiar/ajustar según tu entorno local (no commitear secretos)
+cp .env.example .env  # o crear manualmente
+```
+
+### 3. Ejecutar la App Unificada (Streamlit)
 ```bash
 streamlit run streamlit_app/main.py
 ```
 
-### 3. Ejecutar los Tests
+### 4. Ejecutar los Tests
 ```bash
 pytest tests/ -v
 ```
+
+---
+
+## ✅ Estado, reproducibilidad y limitaciones
+- **Estado:** proyecto colaborativo académico/de demostración (portfolio/research), no desplegado como producto de producción.
+- **Reproducibilidad:** depende de los artefactos/datasets procesados y dependencias del entorno; revisar `data/processed/`, notebooks y `docs/case-study.md` para contexto y evidencia.
+- **Limitaciones:** las salidas financieras/BCR son **modelos/escenarios** (no resultados observados). Algunas cifras deben interpretarse según las verificaciones documentadas en este README y en los artefactos del repositorio.
+
+## 📚 Documentación técnica
+- Caso de estudio técnico: [`docs/case-study.md`](docs/case-study.md)
+- Notebooks y pipeline: [`notebooks/`](notebooks/), [`src/`](src/), [`docs/`](docs/)
 
 ---
 
